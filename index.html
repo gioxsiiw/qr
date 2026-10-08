@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redirigiendo…</title>
+<style>
+  body{font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#f5f5f5;color:#222;text-align:center;padding:1rem}
+  .box{max-width:360px}
+</style>
+</head>
+<body>
+<div class="box" id="msg">Redirigiendo…</div>
+<script>
+(async () => {
+  const msg = document.getElementById('msg');
+  const id = new URLSearchParams(location.search).get('c');
+  try {
+    const r = await fetch('links.json?t=' + Date.now(), {cache: 'no-store'});
+    const map = await r.json();
+    const url = id && map[id];
+    if (url) { location.replace(url); }
+    else { msg.textContent = 'Este código QR aún no tiene un destino asignado.'; }
+  } catch (e) {
+    msg.textContent = 'No se pudo cargar el destino. Intenta de nuevo.';
+  }
+})();
+</script>
+</body>
+</html>
